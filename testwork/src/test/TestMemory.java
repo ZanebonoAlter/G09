@@ -5,7 +5,7 @@ public class TestMemory {
     public static void main(String[] args) {
     	for(;;){
 
-       System. out .println( " 内存信息 :" + toMemoryInfo());
+       System. out .println( " 内存信息1 :" + toMemoryInfo());
        try {
 		Thread.sleep(1000);
 	} catch (InterruptedException e) {
