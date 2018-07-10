@@ -8,6 +8,8 @@ import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,15 +19,21 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 
+import cn.zucc.edu.cn.dao.TomcatStatusDao;
+import cn.zucc.edu.model.Connector;
+import cn.zucc.edu.model.Memory;
+import cn.zucc.edu.model.Memory_Pool;
+
 public class Test {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
         String result = "";
+        int port=9999;
         Document document = null;//引入org.dom4j包
         try {
-            result = getHtmlContext("http://localhost:9999/manager/status?XML=true", "zanebono", "123456");
-           split_result(result);
+            result = getHtmlContext("http://localhost:"+port+"/manager/status?XML=true", "zanebono", "123456");
+           split_result(result,port);
             document = DocumentHelper.parseText(result);//将字符串转化为XML的Document
         } catch (IOException e) {
             e.printStackTrace();
@@ -62,7 +70,7 @@ public class Test {
         }
         return resultBuffer.toString();
     }
-    public static String[] split_result (String result) {
+    public static String[] split_result (String result,int port) {
     	String temp[] = result.split("</status>|<status>|<jvm>|</jvm>|</connector>|<?xml version=\"1.0\" encoding=\"utf-8\"?>|\"\"");
     	//以上为处理不需要的字符
     	String temp_memory[];
@@ -71,6 +79,7 @@ public class Test {
     	String memory_pool[];
     	String temp_connect[];
     	String connect[];
+    	TomcatStatusDao ts = new TomcatStatusDao();
     	for(int i=0;i<temp.length;i++) {//便利需要进一步处理的字符
     		//####################内存############################
     		if(temp[i].indexOf("memory")!=-1) {//如果与内存有关
@@ -85,9 +94,38 @@ public class Test {
     								//System.out.println(temp_memory_pool[k]);
     								memory_pool=temp_memory_pool[k].split("memorypool|name|type|usageInit|usageCommitted|usageMax|usageUsed|=|'");
     								//提取关键字符串
+    								int count=0;
+    								Memory_Pool mp = new Memory_Pool();
     								for(int a=0;a<memory_pool.length;a++) {
     									if(memory_pool[a].length()>0&&!memory_pool[a].equals(" ")) {//去除空格和空值
     										//name type usageInit usageCommitted usageMax usageUsed 依次存入数据库,一个计数器判断类型
+    										switch(count%6) {
+    										case 0:
+    											mp.setName(memory_pool[a]);
+    											break;
+    										case 1:
+    											mp.setType(memory_pool[a]);
+    											break;
+    										case 2:
+    											mp.setInitial(Double.parseDouble(memory_pool[a]));
+    											break;
+    										case 3:
+    											mp.setCommitted(Double.parseDouble(memory_pool[a]));
+    											break;
+    										case 4:
+    											mp.setMaximum(Double.parseDouble(memory_pool[a]));
+    											break;
+    										case 5:
+    											mp.setUsed(Double.parseDouble(memory_pool[a]));
+    											break;
+    										default:
+    											System.out.println("what the hell is that?");
+    										}
+    										count++;
+    										if(count%6==0) {
+    											mp.setPort(port);
+    											ts.add_memory_pool(mp);
+    										}
     										//System.out.println(memory_pool[a]);
     									}
     								}
@@ -97,12 +135,30 @@ public class Test {
     					else {//总内存
     						//System.out.println(temp_memory[j]);
     						memory=temp_memory[j].split("memory|free|total|max|'|=");
+    						Memory m = new Memory();
+    						int count=0;
     						for(int a=0;a<memory.length;a++) {
 								if(memory[a].length()>0&&!memory[a].equals(" ")) {//去除空格和空值
 									//free total max 依次存入数据库
+									switch(count) {
+									case 0:
+										m.setFree(Double.parseDouble(memory[a]));
+										break;
+									case 1:
+										m.setTotal(Double.parseDouble(memory[a]));
+										break;
+									case 2:
+										m.setMax(Double.parseDouble(memory[a]));
+										break;
+									default:
+										System.out.println("something error!");
+									}
+									count++;
 									//System.out.println(memory[a]);
 								}
 							}
+    						m.setPort(port);
+    						ts.add_memory(m);
     					}
     					//System.out.println(temp_memory[j]);
     					//####################################################
@@ -118,11 +174,55 @@ public class Test {
     				if(temp_connect[j].length()>0) {
     					if(temp_connect[j].indexOf("connector")!=-1) {//为连接池
     						connect=temp_connect[j].split("<connector|<threadInfo|<requestInfo|>|/| |name|maxThreads|currentThreadCount|currentThreadsBusy|maxTime|processingTime|requestCount|errorCount|bytesReceived|bytesSent|=|\"|'");
+    						Connector conn=new Connector();
+    						int count =1;
     						for(int k=0;k<connect.length;k++) {
-    							if(connect[k].length()>0&&!connect.equals(" ")) {
+    							if(connect[k].length()>0&&!connect.equals(" ")) {//每个连接池的情况
+    								switch(count) {//基础数据导入
+    								case 1:
+    									conn.setName(connect[k]);
+    									break;
+    								case 2:
+    									conn.setMaxThreads(Integer.parseInt(connect[k]));
+    									break;
+    								case 3:
+    									conn.setCurrentThreadCount(Integer.parseInt(connect[k]));
+    									break;
+    								case 4:
+    									conn.setCurrentThreadsBusy(Integer.parseInt(connect[k]));
+    									break;
+    								case 5:
+    									conn.setMaxTime(Integer.parseInt(connect[k]));
+    									break;
+    								case 6:
+    									conn.setProcessingTime(Integer.parseInt(connect[k]));
+    									break;
+    								case 7:
+    									conn.setRequestCount(Integer.parseInt(connect[k]));
+    									break;
+    								case 8:
+    									conn.setErrorCount(Integer.parseInt(connect[k]));
+    									break;
+    								case 9:
+    									conn.setBytesReceived(Integer.parseInt(connect[k]));
+    									break;
+    								case 10:
+    									conn.setBytesSent(Integer.parseInt(connect[k]));
+    									break;
+    								default:
+    									System.out.println("what the hell is that?");
+    								}
     								//System.out.println(connect[k]);
+    								count++;
     							}
     						}
+    						
+    						try {
+								ts.add_connector(conn.getName(), conn.getMaxThreads(), conn.getCurrentThreadCount(), conn.getCurrentThreadsBusy(), conn.getMaxTime(), conn.getProcessingTime(), conn.getRequestCount(), conn.getErrorCount(), conn.getBytesReceived(), conn.getBytesSent(),port);
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
     					}else if(temp_connect[j].indexOf("worker")!=-1) {
     						//如果需要另外处理
     					}
@@ -132,6 +232,7 @@ public class Test {
     		}
     		//System.out.println(temp[i]);
     	}
+    	ts.release();
     	return null;
     }
 }
