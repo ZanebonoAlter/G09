@@ -8,6 +8,7 @@ public class Memory {
 	private double max;
 	private int port;
 	private Timestamp time;
+	private String ipAddress;
 	public int getPort() {
 		return port;
 	}
@@ -15,7 +16,7 @@ public class Memory {
 		this.port = port;
 	}
 	public Timestamp getTime() {
-		return time;
+		return new Timestamp(System.currentTimeMillis());
 	}
 	public void setTime(Timestamp time) {
 		this.time = time;
@@ -37,5 +38,11 @@ public class Memory {
 	}
 	public void setMax(double max) {
 		this.max = max;
+	}
+	public String getIpAddress() {
+		return ipAddress;
+	}
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
 	}
 }

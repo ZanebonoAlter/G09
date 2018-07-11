@@ -7,14 +7,15 @@ public class Connector {
 	private int maxThreads=0;
 	private int currentThreadCount=0;
 	private int currentThreadsBusy=0;
-	private int maxTime=0;
-	private int processingTime=0;
+	private long maxTime=0;
+	private long processingTime=0;
 	private int requestCount=0;
 	private int errorCount=0;
-	private int bytesReceived=0;
-	private int bytesSent=0;
+	private long bytesReceived=0;
+	private long bytesSent=0;
 	private int port;
 	private Timestamp time;
+	private String ipAddress;
 	public int getPort() {
 		return port;
 	}
@@ -22,7 +23,7 @@ public class Connector {
 		this.port = port;
 	}
 	public Timestamp getTime() {
-		return time;
+		return new Timestamp(System.currentTimeMillis());
 	}
 	public void setTime(Timestamp time) {
 		this.time = time;
@@ -51,16 +52,16 @@ public class Connector {
 	public void setCurrentThreadsBusy(int currentThreadsBusy) {
 		this.currentThreadsBusy = currentThreadsBusy;
 	}
-	public int getMaxTime() {
+	public long getMaxTime() {
 		return maxTime;
 	}
-	public void setMaxTime(int maxTime) {
+	public void setMaxTime(long maxTime) {
 		this.maxTime = maxTime;
 	}
-	public int getProcessingTime() {
+	public long getProcessingTime() {
 		return processingTime;
 	}
-	public void setProcessingTime(int processingTime) {
+	public void setProcessingTime(long processingTime) {
 		this.processingTime = processingTime;
 	}
 	public int getRequestCount() {
@@ -75,16 +76,22 @@ public class Connector {
 	public void setErrorCount(int errorCount) {
 		this.errorCount = errorCount;
 	}
-	public int getBytesReceived() {
+	public long getBytesReceived() {
 		return bytesReceived;
 	}
-	public void setBytesReceived(int bytesReceived) {
+	public void setBytesReceived(long bytesReceived) {
 		this.bytesReceived = bytesReceived;
 	}
-	public int getBytesSent() {
+	public long getBytesSent() {
 		return bytesSent;
 	}
-	public void setBytesSent(int bytesSent) {
+	public void setBytesSent(long bytesSent) {
 		this.bytesSent = bytesSent;
+	}
+	public String getIpAddress() {
+		return ipAddress;
+	}
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
 	}
 }

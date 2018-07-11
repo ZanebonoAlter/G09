@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 
+import cn.zucc.edu.model.Connector;
 import cn.zucc.edu.model.Memory;
 import cn.zucc.edu.model.Memory_Pool;
 
@@ -19,7 +20,7 @@ public class TomcatStatusDao {
 
 	    private PreparedStatement pst1 = null;
 	    String dbDriver ="com.mysql.cj.jdbc.Driver"; 
-	   	String jdbcUrl = "jdbc:mysql://127.0.0.1:3306/tomcat_status?useSSL=true&serverTimezone=GMT%2B8";
+	   	String jdbcUrl = "jdbc:mysql://localhost:3306/tomcat_status?useSSL=true&serverTimezone=GMT%2B8";
 	   	String dbUser = "root";
 	   	String dbPwd = "oracle";
 	    public TomcatStatusDao() {
@@ -55,24 +56,25 @@ public class TomcatStatusDao {
 	        }
 
 	    }
-	    public synchronized int add_connector(String name,int maxThreads,int currentThreadCount,int currentThreadsBusy,int maxTime,int processingTime,int requestCount,int errorCount,int bytesReceived,int bytesSent,int port) throws SQLException {
-	    	String sql ="insert into connector(name,maxThreads,currentThreadCount,currentThreadsBusy,maxTime,processingTime,requestCount,errorCount,bytesReceived,bytesSent,time,port) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+	    public synchronized int add_connector(Connector connector) throws SQLException {
+	    	String sql ="insert into connector(name,maxThreads,currentThreadCount,currentThreadsBusy,maxTime,processingTime,requestCount,errorCount,bytesReceived,bytesSent,time,port,ipAddress) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	    	PreparedStatement pst=null;
 	    	int status=-1;
 	    	try {
 				pst = this.conn.prepareStatement(sql);
-				pst.setString(1, name);
-				pst.setInt(2, maxThreads);
-				pst.setInt(3, currentThreadCount);
-				pst.setInt(4, currentThreadsBusy);
-				pst.setInt(5, maxTime);
-				pst.setInt(6, processingTime);
-				pst.setInt(7, requestCount);
-				pst.setInt(8, errorCount);
-				pst.setInt(9, bytesReceived);
-				pst.setInt(10, bytesSent);
-				pst.setTimestamp(11, new Timestamp(System.currentTimeMillis()));
-				pst.setInt(12, port);
+				pst.setString(1, connector.getName());
+				pst.setInt(2, connector.getMaxThreads());
+				pst.setInt(3, connector.getCurrentThreadCount());
+				pst.setInt(4, connector.getCurrentThreadsBusy());
+				pst.setLong(5, connector.getMaxTime());
+				pst.setLong(6, connector.getProcessingTime());
+				pst.setInt(7, connector.getRequestCount());
+				pst.setInt(8, connector.getErrorCount());
+				pst.setLong(9, connector.getBytesReceived());
+				pst.setLong(10, connector.getBytesSent());
+				pst.setTimestamp(11, connector.getTime());
+				pst.setInt(12, connector.getPort());
+				pst.setString(13, connector.getIpAddress());
 				status=pst.executeUpdate();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -84,7 +86,7 @@ public class TomcatStatusDao {
 	    }
 	    public synchronized int add_memory_pool(Memory_Pool memory_pool) {
 	    	int status=-1;
-	    	String sql="insert into memory_pool(Name,Type,Initial,Committed,Maximum,Used,Port,Time) values(?,?,?,?,?,?,?,?)";
+	    	String sql="insert into memory_pool(Name,Type,Initial,Committed,Maximum,Used,Port,Time,ipAddress) values(?,?,?,?,?,?,?,?,?)";
 	    			PreparedStatement pst=null;
 	    	try {
 				pst = this.conn.prepareStatement(sql);
@@ -95,7 +97,8 @@ public class TomcatStatusDao {
 				pst.setDouble(5, memory_pool.getMaximum());
 				pst.setDouble(6, memory_pool.getUsed());
 				pst.setInt(7, memory_pool.getPort());
-				pst.setTimestamp(8, new Timestamp(System.currentTimeMillis()));
+				pst.setTimestamp(8, memory_pool.getTime());
+				pst.setString(9, memory_pool.getIpAddress());
 				status=pst.executeUpdate();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -112,7 +115,7 @@ public class TomcatStatusDao {
 	    }
 	    public synchronized int add_memory(Memory memory) {
 	    	int status=-1;
-	    	String sql="insert into memory(Free,Total,Max,Port,Time) values(?,?,?,?,?)";
+	    	String sql="insert into memory(Free,Total,Max,Port,Time,ipAddress) values(?,?,?,?,?,?)";
 			PreparedStatement pst=null;
 	try {
 		pst = this.conn.prepareStatement(sql);
@@ -120,7 +123,8 @@ public class TomcatStatusDao {
 		pst.setDouble(2, memory.getTotal());
 		pst.setDouble(3, memory.getMax());
 		pst.setInt(4, memory.getPort());
-		pst.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+		pst.setTimestamp(5, memory.getTime());
+		pst.setString(6, memory.getIpAddress());
 		status=pst.executeUpdate();
 	} catch (SQLException e) {
 		// TODO Auto-generated catch block

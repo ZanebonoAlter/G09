@@ -12,6 +12,13 @@ public class Memory_Pool {
 	private double Used;
 	private int Port;
 	private Timestamp time;
+	private String ipAddress;
+	public String getIpAddress() {
+		return ipAddress;
+	}
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
+	}
 	public String getName() {
 		return Name;
 	}
@@ -55,7 +62,7 @@ public class Memory_Pool {
 		Port = port;
 	}
 	public Timestamp getTime() {
-		return time;
+		return new Timestamp(System.currentTimeMillis());
 	}
 	public void setTime(Timestamp time) {
 		this.time = time;
