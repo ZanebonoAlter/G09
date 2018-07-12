@@ -31,6 +31,7 @@ public class TomcatStatusListener implements ServletContextListener {
      */
     public void contextDestroyed(ServletContextEvent sce)  { 
          // TODO Auto-generated method stub
+    	new TomcatWrite().release();
     }
 
 	/**
@@ -42,6 +43,7 @@ public class TomcatStatusListener implements ServletContextListener {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+            	new TomcatWrite().connect();//表示连接
             	new TomcatWrite().write();
             }
         } , parse, 60*1000);

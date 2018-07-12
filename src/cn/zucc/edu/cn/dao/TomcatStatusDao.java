@@ -3,10 +3,12 @@ package cn.zucc.edu.cn.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 
+import cn.zucc.edu.model.Connecting;
 import cn.zucc.edu.model.Connector;
 import cn.zucc.edu.model.Memory;
 import cn.zucc.edu.model.Memory_Pool;
@@ -137,6 +139,80 @@ public class TomcatStatusDao {
 			e.printStackTrace();
 		}
 	}
+	    	return status;
+	    }
+	    public synchronized int Judge_connecting(String ipAddress,int port) {
+	    	int status = -1;
+	    	String sql = "select * from connecting where ipAddress= ? and port = ?";
+	    	PreparedStatement pst=null;
+	    	ResultSet rs = null;
+	    	try {
+	    		pst = this.conn.prepareStatement(sql);
+	    		pst.setString(1, ipAddress);
+	    		pst.setInt(2, port);
+	    		rs=pst.executeQuery();
+	    		if(rs.next())
+	    			status=1;
+	    	} catch (SQLException e) {
+	    		// TODO Auto-generated catch block
+	    		e.printStackTrace();
+	    	}finally {
+	    		try {
+	    			pst.close();
+	    		} catch (SQLException e) {
+	    			// TODO Auto-generated catch block
+	    			e.printStackTrace();
+	    		}
+	    	}
+	    	return status;
+	    }
+	    public synchronized int add_connecting(Connecting conn) {
+	    	int status = -1;
+	    	String sql = "insert into connecting(ipAddress,port,status,name,last_time) values(?,?,?,?,?)";
+	    	PreparedStatement pst=null;
+	    	try {
+	    		pst = this.conn.prepareStatement(sql);
+	    		pst.setString(1, conn.getIpAddress());
+	    		pst.setInt(2, conn.getPort());
+	    		pst.setString(3, conn.getStatus());
+	    		pst.setString(4, conn.getName());
+	    		pst.setTimestamp(5, conn.getLast_time());
+	    		status=pst.executeUpdate();
+	    	} catch (SQLException e) {
+	    		// TODO Auto-generated catch block
+	    		e.printStackTrace();
+	    	}finally {
+	    		try {
+	    			pst.close();
+	    		} catch (SQLException e) {
+	    			// TODO Auto-generated catch block
+	    			e.printStackTrace();
+	    		}
+	    	}
+	    	return status;
+	    }
+	    public synchronized int update_connecting(Connecting conn) {
+	    	int status = -1;
+	    	String sql = "update connecting set status = ?,last_time=? where ipAddress= ? and port = ?";
+	    	PreparedStatement pst=null;
+	    	try {
+	    		pst = this.conn.prepareStatement(sql);
+	    		pst.setString(1, conn.getStatus());
+	    		pst.setTimestamp(2, conn.getLast_time());
+	    		pst.setString(3, conn.getIpAddress());
+	    		pst.setInt(4, conn.getPort());
+	    		status = pst.executeUpdate();
+	    	} catch (SQLException e) {
+	    		// TODO Auto-generated catch block
+	    		e.printStackTrace();
+	    	}finally {
+	    		try {
+	    			pst.close();
+	    		} catch (SQLException e) {
+	    			// TODO Auto-generated catch block
+	    			e.printStackTrace();
+	    		}
+	    	}
 	    	return status;
 	    }
 }
