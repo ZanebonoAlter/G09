@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-07-11 16:12:15
+Date: 2018-07-13 14:55:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,5 +29,6 @@ CREATE TABLE `memory_pool` (
   `Port` int(11) NOT NULL,
   `ipAddress` varchar(20) NOT NULL,
   `Time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`Time`,`Port`,`Name`,`ipAddress`)
+  PRIMARY KEY (`Time`,`Port`,`Name`,`ipAddress`),
+  UNIQUE KEY `uniqe` (`Name`,`Port`,`ipAddress`,`Time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

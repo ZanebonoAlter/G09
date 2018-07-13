@@ -10,22 +10,21 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-07-13 14:55:49
+Date: 2018-07-13 14:54:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for memory
+-- Table structure for connecting
 -- ----------------------------
-DROP TABLE IF EXISTS `memory`;
-CREATE TABLE `memory` (
+DROP TABLE IF EXISTS `connecting`;
+CREATE TABLE `connecting` (
   `ipAddress` varchar(20) NOT NULL,
-  `Free` double DEFAULT NULL,
-  `Total` double DEFAULT NULL,
-  `Max` double DEFAULT NULL,
-  `Port` int(11) NOT NULL,
-  `Time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`Port`,`Time`,`ipAddress`),
-  UNIQUE KEY `unique_memory` (`ipAddress`,`Port`,`Time`)
+  `port` int(11) NOT NULL,
+  `status` varchar(20) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `last_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ipAddress`,`port`),
+  UNIQUE KEY `uniqe_connecting` (`ipAddress`,`port`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

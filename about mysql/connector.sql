@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-07-11 16:12:01
+Date: 2018-07-13 14:54:34
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -33,5 +33,6 @@ CREATE TABLE `connector` (
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `ipAddress` varchar(20) NOT NULL,
   `port` int(11) NOT NULL,
-  PRIMARY KEY (`time`,`port`,`name`,`ipAddress`)
+  PRIMARY KEY (`time`,`port`,`name`,`ipAddress`),
+  UNIQUE KEY `unique_connector` (`name`,`time`,`ipAddress`,`port`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
