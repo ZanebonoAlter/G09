@@ -9,12 +9,51 @@ import java.util.List;
 import javax.management.MalformedObjectNameException;
 
 import cn.zucc.edu.cn.dao.TomcatStatusDao;
+import cn.zucc.edu.model.Config;
 import cn.zucc.edu.model.Connecting;
 import cn.zucc.edu.model.Connector;
 import cn.zucc.edu.model.Memory;
 import cn.zucc.edu.model.Memory_Pool;
 
 public class TomcatWrite {
+	public synchronized void use_or_add_config() {
+		TomcatStatusDao ts = new TomcatStatusDao();
+		String ipAddress=null;
+		int port = -1;
+		TomcatBeans tb = new TomcatBeans();
+		try {
+			ipAddress = tb.getIpAddress();
+			port = Integer.parseInt(tb.getPort());
+		} catch (MalformedObjectNameException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (NullPointerException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnknownHostException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		Config config =new Config(); 
+		int status = ts.Judge_config(ipAddress, port);
+		if(status==1) {//有记录
+			
+		}else if(status==-1) {//无记录
+			config.setIpAddress(ipAddress);
+			config.setPort(port);
+			config.setMemory_total(0.8);
+			config.setConnector_currentThreadsCount(0.8);
+			config.setConnector_currentThreadsBusy(0.5);
+			config.setMemory_pool_Code_Cache_used(0.8);
+			config.setMemory_pool_Compressed_Class_Space_used(0.8);
+			config.setMemory_pool_Metaspace_used(0.8);
+			config.setMemory_pool_PS_Eden_Space_used(0.9);
+			config.setMemory_pool_PS_Old_Gen_used(0.8);
+			config.setMemory_pool_PS_Survivor_Space_used(1);
+			ts.add_config(config);
+		}
+		ts.release();
+	}
 	public synchronized void release() {
 		TomcatStatusDao ts = new TomcatStatusDao();
 		String ipAddress=null;
@@ -76,7 +115,7 @@ public class TomcatWrite {
 		}
 		ts.release();
 	}
-	
+
 	public synchronized void write() {
 		StringBuffer sb = new StringBuffer();
 		Connector connector = new Connector();
@@ -113,6 +152,7 @@ public class TomcatWrite {
 				connector.setIpAddress(info.getIpAddress());
 				try {
 					ts.add_connector(connector);
+					ts.Judge_connector(connector);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -140,6 +180,7 @@ public class TomcatWrite {
 		m.setIpAddress(ipAddress);
 		m.setPort(port);
 		ts.add_memory(m);
+		ts.Judge_memory(m);
 		
 //		System.out.println("JVM");
 //		System.out.println("free:"+free/1024/1024+"MB");
@@ -161,8 +202,8 @@ public class TomcatWrite {
 		    mp.setUsed(mpm.getUsage().getUsed());
 		    mp.setPort(port);
 		    mp.setIpAddress(ipAddress);
-		    
 		    ts.add_memory_pool(mp);
+		    ts.Judge_memory_pool(mp);
 	    }
 	    ts.release();
 	}

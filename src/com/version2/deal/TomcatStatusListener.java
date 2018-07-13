@@ -38,6 +38,7 @@ public class TomcatStatusListener implements ServletContextListener {
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent sce)  { 
+    	new TomcatWrite().use_or_add_config();//≈–∂œ≈‰÷√–≈œ¢
     	Timer timer = new Timer();
         Date parse = new Timestamp(System.currentTimeMillis());
         timer.scheduleAtFixedRate(new TimerTask() {
