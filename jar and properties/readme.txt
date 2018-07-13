@@ -6,3 +6,7 @@
     <listener-class>com.version2.deal.TomcatStatusListener</listener-class>
  </listener>
 4.开启tomcat(非安装版)
+
+---------新方法
+直接覆盖到tomcat目录下
+配置信息在bin下的config.properties
