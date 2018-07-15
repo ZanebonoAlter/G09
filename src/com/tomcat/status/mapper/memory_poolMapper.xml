@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tomcat.status.dao.memory_poolMapper">
+  <resultMap id="BaseResultMap" type="com.tomcat.status.model.memory_pool">
+    <id column="Name" jdbcType="VARCHAR" property="name" />
+    <id column="Port" jdbcType="INTEGER" property="port" />
+    <id column="ipAddress" jdbcType="VARCHAR" property="ipaddress" />
+    <id column="Time" jdbcType="TIMESTAMP" property="time" />
+    <result column="Type" jdbcType="VARCHAR" property="type" />
+    <result column="Initial" jdbcType="DOUBLE" property="initial" />
+    <result column="Committed" jdbcType="DOUBLE" property="committed" />
+    <result column="Maximum" jdbcType="DOUBLE" property="maximum" />
+    <result column="Used" jdbcType="DOUBLE" property="used" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    Name, Port, ipAddress, Time, Type, Initial, Committed, Maximum, Used
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.tomcat.status.model.memory_poolKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from memory_pool
+    where Name = #{name,jdbcType=VARCHAR}
+      and Port = #{port,jdbcType=INTEGER}
+      and ipAddress = #{ipaddress,jdbcType=VARCHAR}
+      and Time = #{time,jdbcType=TIMESTAMP}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tomcat.status.model.memory_poolKey">
+    delete from memory_pool
+    where Name = #{name,jdbcType=VARCHAR}
+      and Port = #{port,jdbcType=INTEGER}
+      and ipAddress = #{ipaddress,jdbcType=VARCHAR}
+      and Time = #{time,jdbcType=TIMESTAMP}
+  </delete>
+  <insert id="insert" parameterType="com.tomcat.status.model.memory_pool">
+    insert into memory_pool (Name, Port, ipAddress, 
+      Time, Type, Initial, 
+      Committed, Maximum, Used
+      )
+    values (#{name,jdbcType=VARCHAR}, #{port,jdbcType=INTEGER}, #{ipaddress,jdbcType=VARCHAR}, 
+      #{time,jdbcType=TIMESTAMP}, #{type,jdbcType=VARCHAR}, #{initial,jdbcType=DOUBLE}, 
+      #{committed,jdbcType=DOUBLE}, #{maximum,jdbcType=DOUBLE}, #{used,jdbcType=DOUBLE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tomcat.status.model.memory_pool">
+    insert into memory_pool
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        Name,
+      </if>
+      <if test="port != null">
+        Port,
+      </if>
+      <if test="ipaddress != null">
+        ipAddress,
+      </if>
+      <if test="time != null">
+        Time,
+      </if>
+      <if test="type != null">
+        Type,
+      </if>
+      <if test="initial != null">
+        Initial,
+      </if>
+      <if test="committed != null">
+        Committed,
+      </if>
+      <if test="maximum != null">
+        Maximum,
+      </if>
+      <if test="used != null">
+        Used,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        #{port,jdbcType=INTEGER},
+      </if>
+      <if test="ipaddress != null">
+        #{ipaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="initial != null">
+        #{initial,jdbcType=DOUBLE},
+      </if>
+      <if test="committed != null">
+        #{committed,jdbcType=DOUBLE},
+      </if>
+      <if test="maximum != null">
+        #{maximum,jdbcType=DOUBLE},
+      </if>
+      <if test="used != null">
+        #{used,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tomcat.status.model.memory_pool">
+    update memory_pool
+    <set>
+      <if test="type != null">
+        Type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="initial != null">
+        Initial = #{initial,jdbcType=DOUBLE},
+      </if>
+      <if test="committed != null">
+        Committed = #{committed,jdbcType=DOUBLE},
+      </if>
+      <if test="maximum != null">
+        Maximum = #{maximum,jdbcType=DOUBLE},
+      </if>
+      <if test="used != null">
+        Used = #{used,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where Name = #{name,jdbcType=VARCHAR}
+      and Port = #{port,jdbcType=INTEGER}
+      and ipAddress = #{ipaddress,jdbcType=VARCHAR}
+      and Time = #{time,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tomcat.status.model.memory_pool">
+    update memory_pool
+    set Type = #{type,jdbcType=VARCHAR},
+      Initial = #{initial,jdbcType=DOUBLE},
+      Committed = #{committed,jdbcType=DOUBLE},
+      Maximum = #{maximum,jdbcType=DOUBLE},
+      Used = #{used,jdbcType=DOUBLE}
+    where Name = #{name,jdbcType=VARCHAR}
+      and Port = #{port,jdbcType=INTEGER}
+      and ipAddress = #{ipaddress,jdbcType=VARCHAR}
+      and Time = #{time,jdbcType=TIMESTAMP}
+  </update>
+  <select id="selectAllMemory_Pool" resultMap="BaseResultMap">
+  select * from memory_pool where ipAddress=#{ipaddress} and port=#{port} order by time DESC,name DESC limit 6
+  </select>
+</mapper>

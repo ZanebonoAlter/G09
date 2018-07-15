@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tomcat.status.dao.connectingMapper">
+  <resultMap id="BaseResultMap" type="com.tomcat.status.model.connecting">
+    <id column="ipAddress" jdbcType="VARCHAR" property="ipaddress" />
+    <id column="port" jdbcType="INTEGER" property="port" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="last_time" jdbcType="TIMESTAMP" property="lastTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ipAddress, port, status, name, last_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.tomcat.status.model.connectingKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from connecting
+    where ipAddress = #{ipaddress,jdbcType=VARCHAR}
+      and port = #{port,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tomcat.status.model.connectingKey">
+    delete from connecting
+    where ipAddress = #{ipaddress,jdbcType=VARCHAR}
+      and port = #{port,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tomcat.status.model.connecting">
+    insert into connecting (ipAddress, port, status, 
+      name, last_time)
+    values (#{ipaddress,jdbcType=VARCHAR}, #{port,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{lastTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tomcat.status.model.connecting">
+    insert into connecting
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ipaddress != null">
+        ipAddress,
+      </if>
+      <if test="port != null">
+        port,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="lastTime != null">
+        last_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ipaddress != null">
+        #{ipaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        #{port,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="lastTime != null">
+        #{lastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tomcat.status.model.connecting">
+    update connecting
+    <set>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="lastTime != null">
+        last_time = #{lastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ipAddress = #{ipaddress,jdbcType=VARCHAR}
+      and port = #{port,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tomcat.status.model.connecting">
+    update connecting
+    set status = #{status,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      last_time = #{lastTime,jdbcType=TIMESTAMP}
+    where ipAddress = #{ipaddress,jdbcType=VARCHAR}
+      and port = #{port,jdbcType=INTEGER}
+  </update>
+  <select id="selectAllConnecting" resultMap="BaseResultMap">
+  select * from connecting
+  </select>
+</mapper>

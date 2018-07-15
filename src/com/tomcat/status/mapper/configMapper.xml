@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tomcat.status.dao.configMapper">
+  <resultMap id="BaseResultMap" type="com.tomcat.status.model.config">
+    <id column="ipAddress" jdbcType="VARCHAR" property="ipaddress" />
+    <id column="port" jdbcType="INTEGER" property="port" />
+    <result column="memory_total" jdbcType="DOUBLE" property="memoryTotal" />
+    <result column="memory_pool_Compressed_Class_Space_used" jdbcType="DOUBLE" property="memoryPoolCompressedClassSpaceUsed" />
+    <result column="connector_currentThreadsCount" jdbcType="DOUBLE" property="connectorCurrentthreadscount" />
+    <result column="connector_currentThreadsBusy" jdbcType="DOUBLE" property="connectorCurrentthreadsbusy" />
+    <result column="memory_pool_Code_Cache_used" jdbcType="DOUBLE" property="memoryPoolCodeCacheUsed" />
+    <result column="memory_pool_Metaspace_used" jdbcType="DOUBLE" property="memoryPoolMetaspaceUsed" />
+    <result column="memory_pool_PS_Eden_Space_used" jdbcType="DOUBLE" property="memoryPoolPsEdenSpaceUsed" />
+    <result column="memory_pool_PS_Old_Gen_used" jdbcType="DOUBLE" property="memoryPoolPsOldGenUsed" />
+    <result column="memory_pool_PS_Survivor_Space_used" jdbcType="DOUBLE" property="memoryPoolPsSurvivorSpaceUsed" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ipAddress, port, memory_total, memory_pool_Compressed_Class_Space_used, connector_currentThreadsCount, 
+    connector_currentThreadsBusy, memory_pool_Code_Cache_used, memory_pool_Metaspace_used, 
+    memory_pool_PS_Eden_Space_used, memory_pool_PS_Old_Gen_used, memory_pool_PS_Survivor_Space_used
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.tomcat.status.model.configKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from config
+    where ipAddress = #{ipaddress,jdbcType=VARCHAR}
+      and port = #{port,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tomcat.status.model.configKey">
+    delete from config
+    where ipAddress = #{ipaddress,jdbcType=VARCHAR}
+      and port = #{port,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tomcat.status.model.config">
+    insert into config (ipAddress, port, memory_total, 
+      memory_pool_Compressed_Class_Space_used, connector_currentThreadsCount, 
+      connector_currentThreadsBusy, memory_pool_Code_Cache_used, 
+      memory_pool_Metaspace_used, memory_pool_PS_Eden_Space_used, 
+      memory_pool_PS_Old_Gen_used, memory_pool_PS_Survivor_Space_used
+      )
+    values (#{ipaddress,jdbcType=VARCHAR}, #{port,jdbcType=INTEGER}, #{memoryTotal,jdbcType=DOUBLE}, 
+      #{memoryPoolCompressedClassSpaceUsed,jdbcType=DOUBLE}, #{connectorCurrentthreadscount,jdbcType=DOUBLE}, 
+      #{connectorCurrentthreadsbusy,jdbcType=DOUBLE}, #{memoryPoolCodeCacheUsed,jdbcType=DOUBLE}, 
+      #{memoryPoolMetaspaceUsed,jdbcType=DOUBLE}, #{memoryPoolPsEdenSpaceUsed,jdbcType=DOUBLE}, 
+      #{memoryPoolPsOldGenUsed,jdbcType=DOUBLE}, #{memoryPoolPsSurvivorSpaceUsed,jdbcType=DOUBLE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tomcat.status.model.config">
+    insert into config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ipaddress != null">
+        ipAddress,
+      </if>
+      <if test="port != null">
+        port,
+      </if>
+      <if test="memoryTotal != null">
+        memory_total,
+      </if>
+      <if test="memoryPoolCompressedClassSpaceUsed != null">
+        memory_pool_Compressed_Class_Space_used,
+      </if>
+      <if test="connectorCurrentthreadscount != null">
+        connector_currentThreadsCount,
+      </if>
+      <if test="connectorCurrentthreadsbusy != null">
+        connector_currentThreadsBusy,
+      </if>
+      <if test="memoryPoolCodeCacheUsed != null">
+        memory_pool_Code_Cache_used,
+      </if>
+      <if test="memoryPoolMetaspaceUsed != null">
+        memory_pool_Metaspace_used,
+      </if>
+      <if test="memoryPoolPsEdenSpaceUsed != null">
+        memory_pool_PS_Eden_Space_used,
+      </if>
+      <if test="memoryPoolPsOldGenUsed != null">
+        memory_pool_PS_Old_Gen_used,
+      </if>
+      <if test="memoryPoolPsSurvivorSpaceUsed != null">
+        memory_pool_PS_Survivor_Space_used,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ipaddress != null">
+        #{ipaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        #{port,jdbcType=INTEGER},
+      </if>
+      <if test="memoryTotal != null">
+        #{memoryTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="memoryPoolCompressedClassSpaceUsed != null">
+        #{memoryPoolCompressedClassSpaceUsed,jdbcType=DOUBLE},
+      </if>
+      <if test="connectorCurrentthreadscount != null">
+        #{connectorCurrentthreadscount,jdbcType=DOUBLE},
+      </if>
+      <if test="connectorCurrentthreadsbusy != null">
+        #{connectorCurrentthreadsbusy,jdbcType=DOUBLE},
+      </if>
+      <if test="memoryPoolCodeCacheUsed != null">
+        #{memoryPoolCodeCacheUsed,jdbcType=DOUBLE},
+      </if>
+      <if test="memoryPoolMetaspaceUsed != null">
+        #{memoryPoolMetaspaceUsed,jdbcType=DOUBLE},
+      </if>
+      <if test="memoryPoolPsEdenSpaceUsed != null">
+        #{memoryPoolPsEdenSpaceUsed,jdbcType=DOUBLE},
+      </if>
+      <if test="memoryPoolPsOldGenUsed != null">
+        #{memoryPoolPsOldGenUsed,jdbcType=DOUBLE},
+      </if>
+      <if test="memoryPoolPsSurvivorSpaceUsed != null">
+        #{memoryPoolPsSurvivorSpaceUsed,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tomcat.status.model.config">
+    update config
+    <set>
+      <if test="memoryTotal != null">
+        memory_total = #{memoryTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="memoryPoolCompressedClassSpaceUsed != null">
+        memory_pool_Compressed_Class_Space_used = #{memoryPoolCompressedClassSpaceUsed,jdbcType=DOUBLE},
+      </if>
+      <if test="connectorCurrentthreadscount != null">
+        connector_currentThreadsCount = #{connectorCurrentthreadscount,jdbcType=DOUBLE},
+      </if>
+      <if test="connectorCurrentthreadsbusy != null">
+        connector_currentThreadsBusy = #{connectorCurrentthreadsbusy,jdbcType=DOUBLE},
+      </if>
+      <if test="memoryPoolCodeCacheUsed != null">
+        memory_pool_Code_Cache_used = #{memoryPoolCodeCacheUsed,jdbcType=DOUBLE},
+      </if>
+      <if test="memoryPoolMetaspaceUsed != null">
+        memory_pool_Metaspace_used = #{memoryPoolMetaspaceUsed,jdbcType=DOUBLE},
+      </if>
+      <if test="memoryPoolPsEdenSpaceUsed != null">
+        memory_pool_PS_Eden_Space_used = #{memoryPoolPsEdenSpaceUsed,jdbcType=DOUBLE},
+      </if>
+      <if test="memoryPoolPsOldGenUsed != null">
+        memory_pool_PS_Old_Gen_used = #{memoryPoolPsOldGenUsed,jdbcType=DOUBLE},
+      </if>
+      <if test="memoryPoolPsSurvivorSpaceUsed != null">
+        memory_pool_PS_Survivor_Space_used = #{memoryPoolPsSurvivorSpaceUsed,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where ipAddress = #{ipaddress,jdbcType=VARCHAR}
+      and port = #{port,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tomcat.status.model.config">
+    update config
+    set memory_total = #{memoryTotal,jdbcType=DOUBLE},
+      memory_pool_Compressed_Class_Space_used = #{memoryPoolCompressedClassSpaceUsed,jdbcType=DOUBLE},
+      connector_currentThreadsCount = #{connectorCurrentthreadscount,jdbcType=DOUBLE},
+      connector_currentThreadsBusy = #{connectorCurrentthreadsbusy,jdbcType=DOUBLE},
+      memory_pool_Code_Cache_used = #{memoryPoolCodeCacheUsed,jdbcType=DOUBLE},
+      memory_pool_Metaspace_used = #{memoryPoolMetaspaceUsed,jdbcType=DOUBLE},
+      memory_pool_PS_Eden_Space_used = #{memoryPoolPsEdenSpaceUsed,jdbcType=DOUBLE},
+      memory_pool_PS_Old_Gen_used = #{memoryPoolPsOldGenUsed,jdbcType=DOUBLE},
+      memory_pool_PS_Survivor_Space_used = #{memoryPoolPsSurvivorSpaceUsed,jdbcType=DOUBLE}
+    where ipAddress = #{ipaddress,jdbcType=VARCHAR}
+      and port = #{port,jdbcType=INTEGER}
+  </update>
+</mapper>

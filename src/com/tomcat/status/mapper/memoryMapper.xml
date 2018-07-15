@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tomcat.status.dao.memoryMapper">
+  <resultMap id="BaseResultMap" type="com.tomcat.status.model.memory">
+    <id column="Time" jdbcType="TIMESTAMP" property="time" />
+    <id column="Port" jdbcType="INTEGER" property="port" />
+    <id column="ipAddress" jdbcType="VARCHAR" property="ipaddress" />
+    <result column="Free" jdbcType="DOUBLE" property="free" />
+    <result column="Total" jdbcType="DOUBLE" property="total" />
+    <result column="Max" jdbcType="DOUBLE" property="max" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    Time, Port, ipAddress, Free, Total, Max
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.tomcat.status.model.memoryKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from memory
+    where Time = #{time,jdbcType=TIMESTAMP}
+      and Port = #{port,jdbcType=INTEGER}
+      and ipAddress = #{ipaddress,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tomcat.status.model.memoryKey">
+    delete from memory
+    where Time = #{time,jdbcType=TIMESTAMP}
+      and Port = #{port,jdbcType=INTEGER}
+      and ipAddress = #{ipaddress,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tomcat.status.model.memory">
+    insert into memory (Time, Port, ipAddress, 
+      Free, Total, Max)
+    values (#{time,jdbcType=TIMESTAMP}, #{port,jdbcType=INTEGER}, #{ipaddress,jdbcType=VARCHAR}, 
+      #{free,jdbcType=DOUBLE}, #{total,jdbcType=DOUBLE}, #{max,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tomcat.status.model.memory">
+    insert into memory
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="time != null">
+        Time,
+      </if>
+      <if test="port != null">
+        Port,
+      </if>
+      <if test="ipaddress != null">
+        ipAddress,
+      </if>
+      <if test="free != null">
+        Free,
+      </if>
+      <if test="total != null">
+        Total,
+      </if>
+      <if test="max != null">
+        Max,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="port != null">
+        #{port,jdbcType=INTEGER},
+      </if>
+      <if test="ipaddress != null">
+        #{ipaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="free != null">
+        #{free,jdbcType=DOUBLE},
+      </if>
+      <if test="total != null">
+        #{total,jdbcType=DOUBLE},
+      </if>
+      <if test="max != null">
+        #{max,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tomcat.status.model.memory">
+    update memory
+    <set>
+      <if test="free != null">
+        Free = #{free,jdbcType=DOUBLE},
+      </if>
+      <if test="total != null">
+        Total = #{total,jdbcType=DOUBLE},
+      </if>
+      <if test="max != null">
+        Max = #{max,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where Time = #{time,jdbcType=TIMESTAMP}
+      and Port = #{port,jdbcType=INTEGER}
+      and ipAddress = #{ipaddress,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tomcat.status.model.memory">
+    update memory
+    set Free = #{free,jdbcType=DOUBLE},
+      Total = #{total,jdbcType=DOUBLE},
+      Max = #{max,jdbcType=DOUBLE}
+    where Time = #{time,jdbcType=TIMESTAMP}
+      and Port = #{port,jdbcType=INTEGER}
+      and ipAddress = #{ipaddress,jdbcType=VARCHAR}
+  </update>
+   <select id="selectTop"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from memory  
+    where
+    ipAddress = #{ipaddress}    
+    and port=#{port} 
+    order by time DESC limit 1
+  </select>
+</mapper>
