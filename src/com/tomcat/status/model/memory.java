@@ -1,7 +1,12 @@
 package com.tomcat.status.model;
 
-public class memory extends memoryKey {
-    private Double free;
+public class memory extends memoryKey implements java.io.Serializable{
+    /**
+	 * 
+	 */
+
+
+	private Double free;
 
     private Double total;
 

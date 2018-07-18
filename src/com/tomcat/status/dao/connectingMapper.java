@@ -19,4 +19,8 @@ public interface connectingMapper {
     int updateByPrimaryKey(connecting record);
     
     List<connecting> selectAllConnecting();
+    
+    int selectOne(connectingKey key);
+    
+    List<connecting> selectUnusedConnecting();
 }

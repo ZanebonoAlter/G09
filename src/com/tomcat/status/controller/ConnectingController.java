@@ -29,4 +29,13 @@ public class ConnectingController {
 		List<connecting> ls = connectingservice.selectAllConnecting();
         return callback+"("+gson.toJson(ls)+")";  
 	}
+	
+	@RequestMapping("/release_connecting")
+	public String release_connecting(String ipAddress,int port) {
+		return this.connectingservice.releaseConnecting(ipAddress, port);
+	}
+	@RequestMapping("/update_connecting")
+	public String update_connecting(String ipAddress,int port) {
+		return this.connectingservice.updateConnecting(ipAddress, port);
+	}
 }

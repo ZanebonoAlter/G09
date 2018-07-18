@@ -15,4 +15,6 @@ public interface configMapper {
     int updateByPrimaryKeySelective(config record);
 
     int updateByPrimaryKey(config record);
+    
+    int select_one(configKey key);
 }

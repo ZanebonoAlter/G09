@@ -114,4 +114,13 @@
       and error_type = #{errorType,jdbcType=VARCHAR}
       and describe_message = #{describeMessage,jdbcType=VARCHAR}
   </update>
+  <select id="selectUnreadLog" resultMap="BaseResultMap">
+  	select * from log where ipAddress=#{ipaddress} and port = #{port} and read_status='not read'
+  </select>
+   <select id="selectUnSendLog" resultType="int">
+  	select count(*) from log where send_status='not send'
+  </select>
+  <update id="updateSendLog">
+  	update log set send_status='send' where send_status='not send'
+  </update>
 </mapper>

@@ -1,5 +1,9 @@
 package com.tomcat.status.dao;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.tomcat.status.model.log;
 import com.tomcat.status.model.logKey;
 
@@ -15,4 +19,10 @@ public interface logMapper {
     int updateByPrimaryKeySelective(log record);
 
     int updateByPrimaryKey(log record);
+    
+    List<log> selectUnreadLog(@Param("ipaddress")String ipAddress,@Param("port")int port);
+    
+    int selectUnSendLog();
+    
+    int updateSendLog();
 }

@@ -166,4 +166,10 @@
     where ipAddress = #{ipaddress,jdbcType=VARCHAR}
       and port = #{port,jdbcType=INTEGER}
   </update>
+  <select id="select_one" parameterType="com.tomcat.status.model.configKey" resultType="int">
+    select count(*) 
+    from config
+    where ipAddress = #{ipaddress,jdbcType=VARCHAR}
+      and port = #{port,jdbcType=INTEGER}
+  </select>
 </mapper>
