@@ -1,0 +1,10 @@
+<listener>
+    <listener-class>com.tomcat.status.listener.TomcatListener</listener-class>
+  </listener>
+
+
+
+
+
+
+config.properties·ÅÔÚbinÏÂ
