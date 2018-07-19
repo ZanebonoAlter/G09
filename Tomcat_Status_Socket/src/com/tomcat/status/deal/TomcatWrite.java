@@ -1,8 +1,11 @@
 package com.tomcat.status.deal;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryPoolMXBean;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.Date;
@@ -236,4 +239,22 @@ public class TomcatWrite {
 	    }
 
 	}
+	public boolean isHostConnectable() {
+		String host = target_ip;
+		int port = target_port;
+        Socket socket = new Socket();
+        try {
+            socket.connect(new InetSocketAddress(host, port));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }
 }

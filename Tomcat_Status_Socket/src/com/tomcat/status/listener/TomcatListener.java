@@ -36,16 +36,18 @@ public class TomcatListener implements ServletContextListener {
      */
     public void contextInitialized(ServletContextEvent sce)  { 
     	TomcatWrite tw = new TomcatWrite();
-    	tw.use_or_add_config();
-    	Timer timer = new Timer();
-        Date parse = new Timestamp(System.currentTimeMillis());
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-            	new TomcatWrite().connect();//表示连接
-            	new TomcatWrite().write();
-            }
-        } , parse, 60*1000);
+    	if(tw.isHostConnectable()) {
+    		tw.use_or_add_config();
+    		Timer timer = new Timer();
+    		Date parse = new Timestamp(System.currentTimeMillis());
+    		timer.scheduleAtFixedRate(new TimerTask() {
+    			@Override
+    			public void run() {
+    				new TomcatWrite().connect();//表示连接
+    				new TomcatWrite().write();
+    			}
+    		} , parse, 60*1000);
+        }
     }
 }
 	
