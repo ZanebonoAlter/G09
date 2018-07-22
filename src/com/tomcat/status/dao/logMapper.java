@@ -25,4 +25,10 @@ public interface logMapper {
     int selectUnSendLog();
     
     int updateSendLog();
+    
+    int clearUnreadLog();
+    
+    int clearLocalLog(@Param("ipaddress")String ipAddress,@Param("port")int port);
+    
+    int selectCountUnreadLog(@Param("ipaddress")String ipAddress,@Param("port")int port);
 }

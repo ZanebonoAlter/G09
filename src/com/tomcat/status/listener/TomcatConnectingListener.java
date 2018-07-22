@@ -16,6 +16,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.tomcat.status.model.connecting;
 import com.tomcat.status.service.ConnectingService;
+import com.tomcat.status.service.LogService;
 
 /**
  * Application Lifecycle Listener implementation class TomcatConnectingListener
@@ -49,10 +50,12 @@ public class TomcatConnectingListener implements ServletContextListener {
             public void run() {
         		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(sce.getServletContext());
         		ConnectingService connectingservice =(ConnectingService)webApplicationContext.getBean("ConnectingService");
+        		LogService logservice =(LogService)webApplicationContext.getBean("LogService");   		
         		List<connecting> ls = connectingservice.selectUnusedConnecting();
             	if(ls.size()>0)
             		for(connecting conn:ls) {
-            			connectingservice.releaseConnecting(conn.getIpaddress(), conn.getPort());
+            			connectingservice.cleanConnecting(conn);
+            			logservice.addWarnConnecting(conn);
             		}
             }
         } , parse, 60*1000);

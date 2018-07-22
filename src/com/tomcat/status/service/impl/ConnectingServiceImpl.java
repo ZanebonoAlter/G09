@@ -22,6 +22,12 @@ public class ConnectingServiceImpl implements ConnectingService{
 		return this.connectingmapper.selectAllConnecting();
 	}
 	@Override
+	public void cleanConnecting(connecting connecting) {
+		// TODO Auto-generated method stub		
+		connecting.setStatus("断开连接");
+		this.connectingmapper.updateByPrimaryKey(connecting);
+	}
+	@Override
 	public String releaseConnecting(String ipAddress, int port) {
 		// TODO Auto-generated method stub
 		connectingKey connectingKey = new connectingKey();
@@ -59,7 +65,7 @@ public class ConnectingServiceImpl implements ConnectingService{
 				
 				connecting.setLastTime(now.getTime());
 				connecting.setStatus("已连接");
-				if(this.connectingmapper.updateByPrimaryKeySelective(connecting)==1)
+				if(this.connectingmapper.updateByPrimaryKey(connecting)==1)
 					return "success";
 				return "更新数据库失败";
 	}
@@ -67,6 +73,14 @@ public class ConnectingServiceImpl implements ConnectingService{
 	public List<connecting> selectUnusedConnecting() {
 		// TODO Auto-generated method stub
 		return this.connectingmapper.selectUnusedConnecting();
+	}
+	@Override
+	public connecting selectOneConnecting(String ipAddress, int port) {
+		// TODO Auto-generated method stub
+		connectingKey Key = new connectingKey();
+		Key.setIpaddress(ipAddress);
+		Key.setPort(port);
+		return this.connectingmapper.selectByPrimaryKey(Key);
 	}
 
 }

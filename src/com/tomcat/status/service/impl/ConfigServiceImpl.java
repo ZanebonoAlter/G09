@@ -68,6 +68,20 @@ public class ConfigServiceImpl implements ConfigService{
 		// TODO Auto-generated method stub
 		return this.configMapper.insert(config);
 	}
+	@Override
+	public String update_config(config config) {
+		if(this.configMapper.updateByPrimaryKey(config)==1)
+			return "success";
+		return "数据库更新失败";
+	}
+	@Override
+	public config show_config(String ipAddress, int port) {
+		// TODO Auto-generated method stub
+		configKey key = new configKey();
+		key.setIpaddress(ipAddress);
+		key.setPort(port);
+		return this.configMapper.selectByPrimaryKey(key);
+	}
 
 	
 

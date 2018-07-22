@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.tomcat.status.dao.logMapper;
 import com.tomcat.status.model.config;
+import com.tomcat.status.model.connecting;
 import com.tomcat.status.model.connector;
 import com.tomcat.status.model.log;
 import com.tomcat.status.model.memory;
@@ -120,7 +121,7 @@ public class LogServiceImpl implements LogService{
 	@Override
 	public List<log> show_not_read(String ipAddress, int port) {
 		// TODO Auto-generated method stub
-		return this.show_not_read(ipAddress, port);
+		return this.logmapper.selectUnreadLog(ipAddress, port);
 	}
 
 	@Override
@@ -133,6 +134,42 @@ public class LogServiceImpl implements LogService{
 	public int updateSendLog() {
 		// TODO Auto-generated method stub
 		return this.logmapper.updateSendLog();
+	}
+
+	@Override
+	public String clearLog() {
+		// TODO Auto-generated method stub
+			return "已阅"+this.logmapper.clearUnreadLog()+"条消息";		
+	}
+
+	@Override
+	public String clear_local_log(String ipAddress, int port) {
+		// TODO Auto-generated method stub
+		return "已阅"+this.logmapper.clearLocalLog(ipAddress, port);
+	}
+
+	@Override
+	public int selectCountLog(connecting conn) {
+		// TODO Auto-generated method stub
+		String result = ""+this.logmapper.selectCountUnreadLog(conn.getIpaddress(), conn.getPort());
+		if("".equals(result))
+			return 0;
+		else
+		return this.logmapper.selectCountUnreadLog(conn.getIpaddress(), conn.getPort());
+	}
+
+	@Override
+	public void addWarnConnecting(connecting connecting) {
+		// TODO Auto-generated method stub
+		log log = new log();
+		log.setIpaddress(connecting.getIpaddress());
+		log.setPort(connecting.getPort());
+		log.setReadStatus("not read");
+		log.setSendStatus("not send");
+		log.setErrorType("Tomcat连接");
+		log.setTime(connecting.getLastTime());
+		log.setDescribeMessage(connecting.getIpaddress()+":"+connecting.getPort()+"在"+connecting.getLastTime()+"异常断开连接");
+		this.logmapper.insert(log);
 	}
 
 	

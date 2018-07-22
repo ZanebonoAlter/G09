@@ -97,6 +97,6 @@
   select count(*) from connecting where ipAddress=#{ipaddress} and port=#{port}
   </select>
   <select id="selectUnusedConnecting" resultMap="BaseResultMap">
-  select * from connecting having TIMESTAMPDIFF(MINUTE,last_time,NOW())>5
+  select * from connecting where status='已连接' having TIMESTAMPDIFF(MINUTE,last_time,NOW())>5
   </select>
 </mapper>

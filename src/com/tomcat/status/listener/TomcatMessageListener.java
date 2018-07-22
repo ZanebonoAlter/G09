@@ -61,7 +61,7 @@ public class TomcatMessageListener implements ServletContextListener {
 					}
         		}
             }
-        } , parse, 60*1000);
+        } , parse, 5*60*1000);
     }
 	
 }
